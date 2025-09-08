@@ -4,6 +4,7 @@ from agno.agent import Agent
 from agno.models.openai import OpenAIChat
 from agno.playground import Playground
 from agno.storage.sqlite import SqliteStorage
+from fastapi.middleware.cors import CORSMiddleware
 
 # Load OpenAI key
 load_dotenv()
@@ -30,6 +31,15 @@ agent = Agent(
 
 playground = Playground(agents=[agent])
 app = playground.get_app()
+
+# Add CORS support to the app
+app.add_middleware(
+  CORSMiddleware,
+  allow_origins=["*"],   # you can restrict later if needed
+  allow_credentials=True,
+  allow_methods=["*"],
+  allow_headers=["*"],
+)
 
 if __name__ == "__main__":
   playground.serve("agent:app", reload=True)
