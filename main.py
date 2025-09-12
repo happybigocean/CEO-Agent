@@ -26,7 +26,8 @@ SUPABASE_PROJECT = os.getenv("SUPABASE_PROJECT")
 SUPABASE_PASSWORD = os.getenv("SUPABASE_PASSWORD")
 
 SUPABASE_DB_URL = (
-    f"postgresql://postgres.{SUPABASE_PROJECT}:{SUPABASE_PASSWORD}@aws-1-us-east-2.pooler.supabase.com:6543/postgres"
+    #f"postgresql://postgres.qfelvikfvbbbxijcitgg:{SUPABASE_PASSWORD}@aws-1-us-east-2.pooler.supabase.com:6543/postgres"
+    f"postgresql://postgres.qfelvikfvbbbxijcitgg:{SUPABASE_PASSWORD}@aws-1-us-east-2.pooler.supabase.com:5432/postgres"
 )
 
 supabase_db = PostgresDb(
@@ -52,28 +53,10 @@ ceo_agent = Agent(
     num_history_runs=10,
 )
 
-cto_agent = Agent(
-    name="CTO Agent",
-    model=OpenAIChat(id="gpt-4.1"),
-    instructions=(
-        "Always perform a Google Search before answering to ensure information is recent. "
-        "Search should prioritize results from the past 24 hours. Use trusted news sources, "
-        "financial data providers, and official announcements. Summarize clearly, verify conflicting "
-        "claims, flag uncertainty, and provide sources. When asked, include pros & cons, risk "
-        "assessment, and recommended actions. Always act with integrity and transparency."
-    ),
-    markdown=True,
-    db=supabase_db,
-    session_id="cto_agent_session",
-    user_id="cto_user",
-    add_history_to_context=True,
-    num_history_runs=10,
-)
-
 agent_os = AgentOS(
     os_id="netcorobo",
     description="NetcoRobo",
-    agents=[ceo_agent, cto_agent]
+    agents=[ceo_agent]
 )
 
 app = agent_os.get_app()
