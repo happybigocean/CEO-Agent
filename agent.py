@@ -12,27 +12,39 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 if not OPENAI_API_KEY:
     raise ValueError("OPENAI_API_KEY not set in .env")
 
-# Store agent sessions in a SQLite database
+os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
+
 storage = SqliteStorage(table_name="agent_sessions", db_file="agent.db")
 
-# Initialize Agent
-agent = Agent(
+ceo_agent = Agent(
   name="CEO Agent",
-  model=OpenAIChat(id="gpt-4.1", api_key=OPENAI_API_KEY),
+  model=OpenAIChat(id="gpt-4.1"),
   storage=storage,
-  description="CEO Agent with SQLite long-term memory.",
+  description="CEO Agent",
   add_datetime_to_instructions=True,
-  # Add the chat history to the messages
   add_history_to_messages=True,
-  # Number of history runs
   num_history_runs=10,
   markdown=True,
+  session_id="ceo_agent_session",
+  user_id="ceo_user"
 )
 
-playground = Playground(agents=[agent])
+cto_agent = Agent(
+  name="CTO Agent",
+  model=OpenAIChat(id="gpt-4.1"),
+  storage=storage,
+  description="CTO Agent",
+  add_datetime_to_instructions=True,
+  add_history_to_messages=True,
+  num_history_runs=10,
+  markdown=True,
+  session_id="cto_agent_session",
+  user_id="cto_user"
+)
+
+playground = Playground(agents=[ceo_agent, cto_agent])
 app = playground.get_app()
 
-# Add CORS support to the app
 app.add_middleware(
   CORSMiddleware,
   allow_origins=["*"],   # you can restrict later if needed
