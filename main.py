@@ -9,17 +9,17 @@ from agno.db.postgres import PostgresDb
 # Load OpenAI key
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-OS_SECURITY_KEY = os.getenv("OS_SECURITY_KEY")
+#OS_SECURITY_KEY = os.getenv("OS_SECURITY_KEY")
 ENV = os.getenv("ENV", "development")  # default to development if not set
 
 if not OPENAI_API_KEY:
     raise ValueError("OPENAI_API_KEY not set in .env")
-if not OS_SECURITY_KEY:
-    raise ValueError("OS_SECURITY_KEY not set in .env")
+#if not OS_SECURITY_KEY:
+    #raise ValueError("OS_SECURITY_KEY not set in .env")
 
 os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
-os.environ["OS_SECURITY_KEY"] = OS_SECURITY_KEY
-os.environ.pop("OS_SECURITY_KEY", None)
+#os.environ["OS_SECURITY_KEY"] = OS_SECURITY_KEY
+#os.environ.pop("OS_SECURITY_KEY", None)
 
 # Get your Supabase project and password
 SUPABASE_PROJECT = os.getenv("SUPABASE_PROJECT")
