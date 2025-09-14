@@ -26,7 +26,7 @@ SUPABASE_PROJECT = os.getenv("SUPABASE_PROJECT")
 SUPABASE_PASSWORD = os.getenv("SUPABASE_PASSWORD")
 
 SUPABASE_DB_URL = (
-   f"postgresql://postgres.qfelvikfvbbbxijcitgg:{SUPABASE_PASSWORD}@aws-1-us-east-2.pooler.supabase.com:6543/postgres"
+   f"postgresql://postgres.qfelvikfvbbbxijcitgg:IldCjSTVqXfsZ4YZ@aws-1-us-east-2.pooler.supabase.com:6543/postgres"
 )
 
 supabase_db = PostgresDb(
