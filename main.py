@@ -280,6 +280,19 @@ async def test_agent_knowledge(question: str):
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
+# If you need to run locally, use this:
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
+    
+    # Get port from environment (Render sets this automatically)
+    port = int(os.getenv("PORT", 8000))
+    
+    # Only use reload in development
+    use_reload = ENV == "development"
+    
+    uvicorn.run(
+        "main:app",  # Use import string instead of app object when using reload
+        host="0.0.0.0", 
+        port=port,
+        reload=use_reload
+    )
