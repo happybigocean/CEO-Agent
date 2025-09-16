@@ -21,13 +21,14 @@ logger = logging.getLogger(__name__)
 # Load environment variables
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+SUPABASE_CONNECTION_STRING = os.getenv("SUPABASE_CONNECTION_STRING")
 ENV = os.getenv("ENV", "development")
 
 if not OPENAI_API_KEY:
     raise ValueError("OPENAI_API_KEY not set in .env")
 
 SUPABASE_DB_URL = (
-    f"postgresql://postgres.qfelvikfvbbbxijcitgg:IldCjSTVqXfsZ4YZ@aws-1-us-east-2.pooler.supabase.com:6543/postgres"
+    SUPABASE_CONNECTION_STRING
 )
 
 # Initialize database connections
@@ -113,88 +114,11 @@ async def load_knowledge():
             metadata={"user_tag": "Thai Recipes", "content_type": "recipes", "source": "PDF"}
         )
         
-        # Add CEO best practices content
-        result2 = await knowledge.add_content_async(
-            name="CEO Leadership Best Practices",
-            content="""
-# CEO Leadership Best Practices
-
-## Strategic Planning and Vision
-- Develop clear, measurable vision statements that inspire teams
-- Create 3-5 year strategic roadmaps with quarterly milestones
-- Conduct regular market analysis and competitive assessments
-- Align organizational goals with market opportunities
-
-## Team Leadership and Management
-- Foster psychological safety and open communication
-- Implement regular one-on-one meetings with direct reports
-- Create clear career development paths for employees
-- Recognize and reward high performance consistently
-
-## Decision Making Framework
-- Use data-driven approaches for major decisions
-- Consider all stakeholder impacts before implementation
-- Maintain transparency in decision-making processes
-- Document lessons learned from both successes and failures
-
-## Financial Management
-- Monitor key financial metrics monthly
-- Maintain healthy cash flow and reserves
-- Invest in growth opportunities strategically
-- Regular financial audits and compliance checks
-
-## Innovation and Growth
-- Encourage calculated risk-taking and experimentation
-- Allocate budget for research and development
-- Stay current with industry trends and technologies
-- Build partnerships that enhance competitive advantage
-            """,
-            metadata={"user_tag": "CEO Guidelines", "content_type": "best_practices", "category": "leadership"}
-        )
-        
-        # Add sample company policies
-        result3 = await knowledge.add_content_async(
-            name="Company Policies and Procedures",
-            content="""
-# Company Policies and Procedures
-
-## Remote Work Policy
-- Flexible working hours between 8 AM - 6 PM local time
-- Mandatory team meetings twice weekly
-- Home office equipment allowance provided
-- Regular check-ins with managers required
-
-## Performance Review Process
-- Quarterly performance reviews for all employees
-- 360-degree feedback system implementation
-- Goal setting and tracking using OKR framework
-- Career development discussions included
-
-## Code of Conduct
-- Respect and inclusivity in all interactions
-- Confidentiality of company and client information
-- Ethical business practices and compliance
-- Reporting procedures for violations
-
-## Training and Development
-- Annual training budget per employee
-- Skill development workshops monthly
-- Leadership training programs available
-- External conference and certification support
-            """,
-            metadata={"user_tag": "Company Policies", "content_type": "policies", "category": "operations"}
-        )
-        
         logger.info("Knowledge loading completed successfully")
         
         return {
             "status": "success", 
             "message": "Knowledge base loaded successfully",
-            "loaded_items": [
-                {"name": "Thai Recipes Collection", "result": str(result1)[:100]},
-                {"name": "CEO Leadership Best Practices", "result": str(result2)[:100]},
-                {"name": "Company Policies", "result": str(result3)[:100]}
-            ]
         }
         
     except Exception as e:
